@@ -51,15 +51,17 @@
 // }
 
 // STARTER CODE FOR THIS FILE. TimeStamp to paste this code => 00:34:35
+import Navbar from '@/components/shared/navbar'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default async function Home() {
+  const auth = true
   return (
     <div className="bg-[#fffc00]">
       <div className="min-h-screen flex flex-col items-center justify-center max-w-7xl mx-auto">
-        {/* <Navbar /> */}
+        <Navbar />
         <main className="flex flex-1 flex-col md:flex-row items-center justify-center px-8 mt-4">
           <div className="flex-1 md:text-left text-center h-full">
             <h1 className="text-4xl md:text-6xl font-bold">
@@ -74,7 +76,7 @@ export default async function Home() {
                 What are you waiting for?
               </p>
             </div>
-            {true ? (
+            {auth ? (
               <Button
                 asChild
                 className="mt-4 bg-black text-white flex items-center rounded-lg gap-2 mx-auto md:mx-0"
