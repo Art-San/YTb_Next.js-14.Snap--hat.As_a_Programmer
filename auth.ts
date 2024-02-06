@@ -37,6 +37,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         try {
           const user = await User.findOne({ email: profile?.email })
+          console.log('user', user)
 
           // signup the user if not found
           if (!user) {

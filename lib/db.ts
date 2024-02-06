@@ -8,13 +8,13 @@ export async function connectToMongoDB() {
     return cachedConnection
   }
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI as string)
+    const conn = await mongoose.connect(process.env.MONGO as string)
     cachedConnection = conn.connection
 
     console.log('Установлено новое соединение с mongodb')
     return cachedConnection
   } catch (error) {
-    console.log(error)
+    console.log('ЖУТКАЯ ошибка', error)
 
     throw error
   }
