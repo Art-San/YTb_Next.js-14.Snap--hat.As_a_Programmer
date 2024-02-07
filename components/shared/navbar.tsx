@@ -7,6 +7,7 @@ import { auth } from '@/auth'
 
 const Navbar = async () => {
   const session = await auth()
+  console.log('Navbar  session.user ', session?.user)
   return (
     <header className="w-full py-4 px-8 flex justify-between items-center">
       <Image

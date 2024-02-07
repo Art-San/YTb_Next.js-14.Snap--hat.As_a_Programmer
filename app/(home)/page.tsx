@@ -9,7 +9,8 @@ export default async function Home() {
   const session = await auth()
   // console.log('session', session)
   return (
-    <div className="bg-[#fffc00]">
+    <div className="bg-gradient-to-r from-rose-300 to-amber-400">
+      {/* <div className="bg-[#fffc00]"> */}
       <div className="min-h-screen flex flex-col items-center justify-center max-w-7xl mx-auto">
         <Navbar />
         <main className="flex flex-1 flex-col md:flex-row items-center justify-center px-8 mt-4">

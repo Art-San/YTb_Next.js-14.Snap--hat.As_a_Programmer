@@ -12,7 +12,7 @@ export default function LoginCard() {
   //   await signIn('github')
   // }
 
-  const [errorMessage, dispatch] = useFormState(authAction, '')
+  const [errorMessage, dispatch] = useFormState(authAction, '') // или undefined
 
   return (
     <>
