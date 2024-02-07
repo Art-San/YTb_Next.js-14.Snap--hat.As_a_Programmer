@@ -4,6 +4,7 @@ import { connectToMongoDB } from './db'
 import Chat, { IChatDocument } from '@/models/chatModel'
 import { unstable_noStore as noStore } from 'next/cache'
 
+// 2:26:42
 export const getUsersForSidebar = async (authUserId: string) => {
   noStore()
   try {
