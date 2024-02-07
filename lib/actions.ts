@@ -25,7 +25,10 @@ export async function authAction() {
 }
 
 export async function logoutAction() {
-  await signOut()
+  'use server'
+  await signOut({ redirectTo: '/' })
+  // await signOut({ redirectTo: '/' })
+  // await signOut() // так тоже можно
 }
 
 // export const sendMessageAction = async (

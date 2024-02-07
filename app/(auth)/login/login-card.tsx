@@ -5,8 +5,6 @@ import Image from 'next/image'
 import { authAction } from '@/lib/actions'
 import { useFormStatus, useFormState } from 'react-dom'
 
-// import { signIn } from '@/auth'
-
 export default function LoginCard() {
   // inline server action: in client components cannot be used as inline. You have to put it in a file and import it.
   // async function authAction() {
