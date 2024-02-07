@@ -1,9 +1,11 @@
+import { authConfig } from './auth.config'
 import NextAuth from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 import { connectToMongoDB } from './lib/db'
 import User from './models/userModel'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  ...authConfig,
   providers: [
     GitHub({
       clientId: process.env.GITHUB_ID,
@@ -12,32 +14,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   secret: process.env.AUTH_SECRET,
   callbacks: {
-    // async session({ session }) {
-    //   try {
-    //     await connectToMongoDB()
-    //     if (session.user) {
-    //       const user = await User.findOne({ email: session.user.email })
-    //       if (user) {
-    //         session.user._id = user._id
-    //         return session
-    //       } else {
-    //         throw new Error('User not found')
-    //       }
-    //     } else {
-    //       throw new Error('Invalid session')
-    //     }
-    //   } catch (error) {
-    //     console.log(error)
-    //     throw new Error('Invalid session')
-    //   }
-    // },
+    async session({ session }) {
+      try {
+        await connectToMongoDB()
+        if (session.user) {
+          const user = await User.findOne({ email: session.user.email })
+          if (user) {
+            session.user._id = user._id
+            return session
+          } else {
+            throw new Error('User not found')
+          }
+        } else {
+          throw new Error('Invalid session')
+        }
+      } catch (error) {
+        console.log(error)
+        throw new Error('Invalid session')
+      }
+    },
     async signIn({ account, profile }) {
       if (account?.provider === 'github') {
         await connectToMongoDB()
 
         try {
           const user = await User.findOne({ email: profile?.email })
-          console.log('Auth signIn user', user)
+          // console.log('Auth signIn user', user)
 
           // signup the user if not found
           if (!user) {
@@ -58,6 +60,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       return false // указать неудачный вход в систему
-    }
+    },
+    ...authConfig.callbacks
   }
 })
