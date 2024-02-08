@@ -60,7 +60,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       return false // указать неудачный вход в систему
-    },
-    ...authConfig.callbacks
+    }
   }
 })

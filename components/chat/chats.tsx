@@ -11,9 +11,9 @@ const Chats = async () => {
   return (
     <nav className="flex-1 overflow-y-auto">
       <ul>
-        {/* {chats.map((chat) => (
+        {chats.map((chat) => (
           <Chat key={chat._id} chat={chat} />
-        ))} */}
+        ))}
       </ul>
     </nav>
   )
