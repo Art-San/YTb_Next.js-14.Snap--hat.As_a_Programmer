@@ -35,6 +35,9 @@ const ChatSideBar = async () => {
           </div>
         </div>
       </div>
+      {/* {<Chats //  в таком виде будет блокировать загрузку страницы по ка не прейдут данные с сервера
+      />}  */}
+      {/* <Suspense fallback={<h1>Loading...</h1>}>{<Chats />}</Suspense> */}
       <Suspense fallback={<ChatsSkeleton />}>{<Chats />}</Suspense>
     </aside>
   )

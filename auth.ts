@@ -21,6 +21,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const user = await User.findOne({ email: session.user.email })
           if (user) {
             session.user._id = user._id
+            session.user.image = user.avatar
             return session
           } else {
             throw new Error('User not found')

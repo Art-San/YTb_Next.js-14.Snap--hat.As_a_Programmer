@@ -3,11 +3,13 @@ import { getUsersForSidebar } from '@/lib/data'
 import Chat from './chat'
 
 // 2:37:10
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const Chats = async () => {
   const session = await auth()
+  await sleep(10000)
   console.log('Chats session', session)
   const chats = session?.user ? await getUsersForSidebar(session.user._id) : []
-  console.log('Chats chats', chats)
+  // console.log('Chats chats', chats)
   return (
     <nav className="flex-1 overflow-y-auto">
       <ul>
