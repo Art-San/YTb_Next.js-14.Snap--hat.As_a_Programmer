@@ -1,9 +1,14 @@
 import { Skeleton } from '@/components/ui/skeleton'
+import { type } from 'os'
 
-export function ChatsSkeleton() {
+interface IChatsSkeletonProps {
+  quantity: number
+}
+
+export function ChatsSkeleton({ quantity }: IChatsSkeletonProps) {
   return (
     <div className="flex flex-col px-3 gap-3">
-      {Array.from({ length: 5 }).map((_, i) => (
+      {Array.from({ length: quantity }).map((_, i) => (
         <div className="flex items-center space-x-4" key={i}>
           <Skeleton className="h-12 w-12 rounded-full" />
           <div className="space-y-2">

@@ -7,9 +7,12 @@ import { auth } from '@/auth'
 import Chats from './chats'
 import { Suspense } from 'react'
 import { ChatsSkeleton } from '../skeletons/chats-skeletons'
+import { getUsersForSidebar } from '@/lib/data'
 
 const ChatSideBar = async () => {
   const session = await auth()
+  const chats = session?.user ? await getUsersForSidebar(session.user._id) : []
+  console.log('session.user', typeof chats.length)
   return (
     <aside className="flex-[1_1_0%] flex flex-col bg-black text-white">
       <div className="sticky top-0 bg-black z-50">
@@ -38,7 +41,9 @@ const ChatSideBar = async () => {
       {/* {<Chats //  в таком виде будет блокировать загрузку страницы по ка не прейдут данные с сервера
       />}  */}
       {/* <Suspense fallback={<h1>Loading...</h1>}>{<Chats />}</Suspense> */}
-      <Suspense fallback={<ChatsSkeleton />}>{<Chats />}</Suspense>
+      <Suspense fallback={<ChatsSkeleton quantity={chats.length} />}>
+        {<Chats chats={chats} />}
+      </Suspense>
     </aside>
   )
 }
