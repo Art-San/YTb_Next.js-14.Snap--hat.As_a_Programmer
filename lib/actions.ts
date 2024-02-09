@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary'
 import Message, { IMessageDocument } from '@/models/messageModel'
 import Chat, { IChatDocument } from '@/models/chatModel'
 import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
-// import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -71,8 +71,8 @@ export const sendMessageAction = async (
 
     revalidatePath(`/chat/${receiverId}`)
 
-    // Alternative usage for the revalidatePath function:
-    // revalidatePath("/chat/[id]","page")
+    // Альтернативное использование функции revalidatePath:
+    revalidatePath('/chat/[id]', 'page')
 
     return newMessage
   } catch (error: any) {
@@ -81,26 +81,27 @@ export const sendMessageAction = async (
   }
 }
 
-// export const deleteChatAction = async (userId: string) => {
-//   try {
-//     await connectToMongoDB()
-//     const { user } = (await auth()) || {}
-//     if (!user) return
-//     const chat = await Chat.findOne({
-//       participants: { $all: [user._id, userId] }
-//     })
-//     if (!chat) return
+// 04:03:16
+export const deleteChatAction = async (userId: string) => {
+  try {
+    await connectToMongoDB()
+    const { user } = (await auth()) || {}
+    if (!user) return
+    const chat = await Chat.findOne({
+      participants: { $all: [user._id, userId] }
+    })
+    if (!chat) return
 
-//     const messageIds = chat.messages.map((messageId) => messageId.toString())
-//     await Message.deleteMany({ _id: { $in: messageIds } })
-//     await Chat.deleteOne({ _id: chat._id })
+    const messageIds = chat.messages.map((messageId) => messageId.toString())
+    await Message.deleteMany({ _id: { $in: messageIds } })
+    await Chat.deleteOne({ _id: chat._id })
 
-//     revalidatePath('/chat/[id]', 'page')
-//     // this will throw an error bc it internally throws an error
-//     // redirect("/chat");
-//   } catch (error: any) {
-//     console.error('Error in deleteChat:', error.message)
-//     throw error
-//   }
-//   redirect('/chat')
-// }
+    revalidatePath('/chat/[id]', 'page')
+    // this will throw an error bc it internally throws an error
+    // redirect("/chat");
+  } catch (error: any) {
+    console.error('Error in deleteChat:', error.message)
+    throw error
+  }
+  redirect('/chat')
+}

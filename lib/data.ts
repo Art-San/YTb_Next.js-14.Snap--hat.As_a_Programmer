@@ -79,7 +79,7 @@ export const getMessages = async (authUserId: string, otherUserId: string) => {
     if (!chat) return []
 
     const messages = chat.messages
-    return JSON.parse(JSON.stringify(messages))
+    return JSON.parse(JSON.stringify(messages)) // важный момент
   } catch (error) {
     console.log('Error in getMessages: ', error)
     throw error

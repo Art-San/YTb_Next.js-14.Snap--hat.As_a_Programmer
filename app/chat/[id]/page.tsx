@@ -9,7 +9,7 @@ const ChatHistoryPage = async ({ params }: { params: { id: string } }) => {
   const messages = session
     ? await getMessages(session?.user?._id, params.id)
     : []
-  console.log('messages', messages)
+
   return (
     <div className="bg-sigMain h-screen flex-[3_3_0%] flex flex-col px-4 text-white">
       {/* topbar */}
