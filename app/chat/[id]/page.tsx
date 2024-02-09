@@ -42,6 +42,7 @@ const ChatHistoryPage = async ({ params }: { params: { id: string } }) => {
           <ChatMessages />
         </div>
       </div>
+
       {/* Input */}
       <SendMsgInput />
     </div>

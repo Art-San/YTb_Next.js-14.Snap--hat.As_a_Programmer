@@ -45,6 +45,7 @@ export const getUsersForSidebar = async (authUserId: string) => {
   }
 }
 
+// 3:42:19
 export const getUserProfile = async (userId: string) => {
   noStore()
   try {
