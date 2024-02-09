@@ -59,6 +59,7 @@ export const getUserProfile = async (userId: string) => {
   }
 }
 
+// 3:45:40
 export const getMessages = async (authUserId: string, otherUserId: string) => {
   noStore()
   try {
