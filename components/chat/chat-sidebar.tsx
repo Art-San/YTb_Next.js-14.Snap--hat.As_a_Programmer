@@ -12,7 +12,7 @@ import { getUsersForSidebar } from '@/lib/data'
 const ChatSideBar = async () => {
   const session = await auth()
   const chats = session?.user ? await getUsersForSidebar(session.user._id) : []
-  console.log('session.user', typeof chats.length)
+  // console.log('session.user', typeof chats.length)
   return (
     <aside className="flex-[1_1_0%] flex flex-col bg-black text-white">
       <div className="sticky top-0 bg-black z-50">
