@@ -97,11 +97,38 @@ export const deleteChatAction = async (userId: string) => {
     await Chat.deleteOne({ _id: chat._id })
 
     revalidatePath('/chat/[id]', 'page')
-    // this will throw an error bc it internally throws an error
+    //это выдаст ошибку, потому что это выдает внутреннюю ошибку
     // redirect("/chat");
   } catch (error: any) {
     console.error('Error in deleteChat:', error.message)
     throw error
   }
   redirect('/chat')
+}
+
+export const deleteMessageAction = async (messageId: string) => {
+  try {
+    await connectToMongoDB()
+    const { user } = (await auth()) || {}
+    if (!user) return
+
+    // Проверка, является ли пользователь отправителем или получателем сообщения
+    const message = await Message.findById(messageId)
+    if (!message) return
+    if (
+      message.sender.toString() !== user._id.toString() &&
+      message.receiver.toString() !== user._id.toString()
+    ) {
+      throw new Error('У вас нет прав на удаление этого сообщения')
+    }
+
+    // Удаление сообщения
+    await Message.deleteOne({ _id: messageId })
+
+    // Обновление кэша страницы чата, если это необходимо
+    // revalidatePath('/chat/[id]', 'page');
+  } catch (error: any) {
+    console.error('Error in deleteMessage:', error.message)
+    throw error
+  }
 }

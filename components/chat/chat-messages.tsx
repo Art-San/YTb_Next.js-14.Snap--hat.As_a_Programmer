@@ -64,6 +64,7 @@ const ChatMessages = ({ messages, session }: ChatMessagesProps) => {
     imgURL: ''
   })
 
+  // Скролить вниз если сообщение за экраном
   useEffect(() => {
     lastMsgRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
@@ -76,6 +77,7 @@ const ChatMessages = ({ messages, session }: ChatMessagesProps) => {
         const isMessageImage = message.messageType === 'image'
         const isPrevMessageFromSameSender =
           idx > 0 && messages[idx - 1].sender._id === message.sender._id
+        // Скролить вниз если картинка за экраном
         const handleImageLoad = () => {
           lastMsgRef.current?.scrollIntoView({ behavior: 'smooth' })
         }

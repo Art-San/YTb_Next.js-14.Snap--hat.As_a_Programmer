@@ -14,7 +14,7 @@ const SendMsgInput = () => {
   const [isLoading, setIsLoading] = useState(false)
   const params = useParams<{ id: string }>()
 
-  console.log('SendMsgInput params.id', params.id)
+  // console.log('SendMsgInput params.id', params.id)
   const receiverId = params.id
 
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
