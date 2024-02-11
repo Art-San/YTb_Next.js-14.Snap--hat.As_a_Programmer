@@ -72,7 +72,7 @@ export const sendMessageAction = async (
     revalidatePath(`/chat/${receiverId}`)
 
     // Альтернативное использование функции revalidatePath:
-    revalidatePath('/chat/[id]', 'page')
+    // revalidatePath('/chat/[id]', 'page')
 
     return newMessage
   } catch (error: any) {
@@ -105,30 +105,30 @@ export const deleteChatAction = async (userId: string) => {
   }
   redirect('/chat')
 }
+/*TODO:*/
+// export const deleteMessageAction = async (messageId: string) => {
+//   try {
+//     await connectToMongoDB()
+//     const { user } = (await auth()) || {}
+//     if (!user) return
 
-export const deleteMessageAction = async (messageId: string) => {
-  try {
-    await connectToMongoDB()
-    const { user } = (await auth()) || {}
-    if (!user) return
+//     // Проверка, является ли пользователь отправителем или получателем сообщения
+//     const message = await Message.findById(messageId)
+//     if (!message) return
+//     if (
+//       message.sender.toString() !== user._id.toString() &&
+//       message.receiver.toString() !== user._id.toString()
+//     ) {
+//       throw new Error('У вас нет прав на удаление этого сообщения')
+//     }
 
-    // Проверка, является ли пользователь отправителем или получателем сообщения
-    const message = await Message.findById(messageId)
-    if (!message) return
-    if (
-      message.sender.toString() !== user._id.toString() &&
-      message.receiver.toString() !== user._id.toString()
-    ) {
-      throw new Error('У вас нет прав на удаление этого сообщения')
-    }
+//     // Удаление сообщения
+//     await Message.deleteOne({ _id: messageId })
 
-    // Удаление сообщения
-    await Message.deleteOne({ _id: messageId })
-
-    // Обновление кэша страницы чата, если это необходимо
-    // revalidatePath('/chat/[id]', 'page');
-  } catch (error: any) {
-    console.error('Error in deleteMessage:', error.message)
-    throw error
-  }
-}
+//     // Обновление кэша страницы чата, если это необходимо
+//     // revalidatePath('/chat/[id]', 'page');
+//   } catch (error: any) {
+//     console.error('Error in deleteMessage:', error.message)
+//     throw error
+//   }
+// }
