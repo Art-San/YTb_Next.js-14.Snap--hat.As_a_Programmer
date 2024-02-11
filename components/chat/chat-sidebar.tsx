@@ -42,7 +42,8 @@ const ChatSideBar = async () => {
       />}  */}
       {/* <Suspense fallback={<h1>Loading...</h1>}>{<Chats />}</Suspense> */}
       <Suspense fallback={<ChatsSkeleton quantity={chats.length} />}>
-        {<Chats chats={chats} />}
+        {/* <Chats chats={chats} /> */}
+        {<Chats />}
       </Suspense>
     </aside>
   )
