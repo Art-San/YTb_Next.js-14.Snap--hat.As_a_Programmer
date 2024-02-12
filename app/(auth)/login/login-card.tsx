@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { authAction } from '@/lib/actions'
+import { authAction, authActionGoogle } from '@/lib/actions'
 import { useFormStatus, useFormState } from 'react-dom'
 
 export default function LoginCard() {
@@ -11,7 +11,10 @@ export default function LoginCard() {
   return (
     <>
       <form action={dispatch} className="space-y-4">
-        <LoginButton />
+        <LoginButton desc={'in with Github'} />
+      </form>
+      <form action={authActionGoogle} className="space-y-4">
+        <LoginButton desc={'in with Google'} />
       </form>
       <div className="mt-4 text-center text-[13px]">
         <span>New To SnapNext? </span>
@@ -29,7 +32,7 @@ export default function LoginCard() {
   )
 }
 
-function LoginButton() {
+function LoginButton({ desc }: { desc: string }) {
   const { pending } = useFormStatus()
   return (
     <Button
@@ -38,7 +41,7 @@ function LoginButton() {
       aria-disabled={pending}
     >
       <Image src={'/github.svg'} width={20} height={20} alt="Github logo" /> Log
-      in with Github
+      {desc}
     </Button>
   )
 }

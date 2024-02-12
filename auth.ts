@@ -1,6 +1,7 @@
 import { authConfig } from './auth.config'
 import NextAuth from 'next-auth'
 import GitHub from 'next-auth/providers/github'
+import Goggle from 'next-auth/providers/google'
 import { connectToMongoDB } from './lib/db'
 import User from './models/userModel'
 
@@ -10,6 +11,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     GitHub({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET
+    }),
+    Goggle({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_SECRET
     })
   ],
   secret: process.env.AUTH_SECRET,
@@ -35,32 +40,79 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
     },
     async signIn({ account, profile }) {
-      if (account?.provider === 'github') {
+      try {
         await connectToMongoDB()
+        let user = await User.findOne({ email: profile?.email })
 
-        try {
-          const user = await User.findOne({ email: profile?.email })
-          // console.log('Auth signIn user', user)
-
-          // signup the user if not found
-          if (!user) {
-            const newUser = await User.create({
-              username: profile?.login,
-              email: profile?.email,
-              fullName: profile?.name,
-              avatar: profile?.avatar_url
-            })
-
-            await newUser.save()
-          }
-          return true // indicate successful sign-in
-        } catch (error) {
-          console.log(error)
-          return false // indicate failed sign-in
+        if (!user) {
+          // Создание нового пользователя
+          user = await User.create({
+            username: profile?.login || profile?.given_name,
+            email: profile?.email,
+            fullName: profile?.name,
+            avatar: profile?.avatar_url || profile?.picture
+          })
+          await user.save()
         }
-      }
 
-      return false // указать неудачный вход в систему
+        // Дополнительная  логика, если необходима
+
+        return true // Успешный вход
+      } catch (error) {
+        console.error('Error signing in:', error)
+        // Возвращайте более подробное сообщение об ошибке, если это возможно
+        return false
+      }
     }
+    // async signIn({ account, profile }) {
+    //   console.log('account?.provider', account?.provider)
+    //   console.log('profile', profile)
+    //   if (account?.provider === 'github') {
+    //     await connectToMongoDB()
+
+    //     try {
+    //       const user = await User.findOne({ email: profile?.email })
+
+    //       // signup the user if not found
+    //       if (!user) {
+    //         const newUser = await User.create({
+    //           username: profile?.login,
+    //           email: profile?.email,
+    //           fullName: profile?.name,
+    //           avatar: profile?.avatar_url
+    //         })
+
+    //         await newUser.save()
+    //       }
+    //       return true // indicate successful sign-in
+    //     } catch (error) {
+    //       console.log(error)
+    //       return false // indicate failed sign-in
+    //     }
+    //   } else if (account?.provider === 'google') {
+    //     await connectToMongoDB()
+    //     try {
+    //       const user = await User.findOne({ email: profile?.email })
+
+    //       if (!user) {
+    //         const newUser = await User.create({
+    //           username: profile?.given_name,
+    //           email: profile?.email,
+    //           fullName: profile?.name,
+    //           avatar: profile?.picture
+    //         })
+
+    //         await newUser.save()
+    //       }
+
+    //       return true
+    //     } catch (error) {
+    //       console.log(error)
+    //       return false
+    //     }
+    //   }
+    //   console.log('auth signIn')
+    //   return false // указать неудачный вход в систему
+    // }
   }
 })

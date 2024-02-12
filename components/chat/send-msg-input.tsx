@@ -16,12 +16,17 @@ const SendMsgInput = () => {
 
   const receiverId = params.id
 
+  // console.log('receiverId', receiverId)
+  // console.log('messageContent', messageContent)
+
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     try {
-      await sendMessageAction(receiverId, messageContent, 'text')
-      setMessageContent('')
+      const result = await sendMessageAction(receiverId, messageContent, 'text')
+      if (result) {
+        setMessageContent('')
+      }
     } catch (error) {
       console.log(error)
     } finally {

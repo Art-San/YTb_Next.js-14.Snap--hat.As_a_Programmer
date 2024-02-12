@@ -6,6 +6,20 @@ import Message, { IMessageDocument } from '@/models/messageModel'
 import Chat, { IChatDocument } from '@/models/chatModel'
 import { revalidatePath, unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
+import mongoose, { Document, Types } from 'mongoose'
+
+interface MongooseObject extends Document {
+  sender: Types.ObjectId
+  receiver: Types.ObjectId
+  content: string
+  messageType: string
+  opened: boolean
+  _id?: Types.ObjectId
+  createdAt: Date
+  updatedAt: Date
+  __v?: number
+  [key: string]: any
+}
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -23,12 +37,31 @@ export async function authAction() {
     return error.message
   }
 }
+export async function authActionGoogle() {
+  await signIn('google')
+}
 
 export async function logoutAction() {
   'use server'
   await signOut({ redirectTo: '/' })
   // await signOut({ redirectTo: '/' })
   // await signOut() // так тоже можно
+}
+
+// эта фун преобразовывает объект из mongoose в простой объект
+function convertMongooseObjectToPlainObject(
+  mongooseObject: MongooseObject
+): Record<string, unknown> {
+  const plainObject: Record<string, unknown> = {}
+  const doc = mongooseObject._doc // Непосредственно обращаемся к свойству _doc
+  for (const key in doc) {
+    if (doc.hasOwnProperty(key)) {
+      const value = doc[key]
+      plainObject[key] =
+        value instanceof Types.ObjectId ? value.toString() : value
+    }
+  }
+  return plainObject
 }
 
 export const sendMessageAction = async (
@@ -70,11 +103,13 @@ export const sendMessageAction = async (
     }
 
     revalidatePath(`/chat/${receiverId}`)
-
     // Альтернативное использование функции revalidatePath:
     // revalidatePath('/chat/[id]', 'page')
 
-    return newMessage
+    const plainObject = await convertMongooseObjectToPlainObject(newMessage)
+
+    return true
+    // return plainObject
   } catch (error: any) {
     console.error('Error in sendMessage:', error.message)
     throw error
