@@ -5,9 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export default async function Home() {
-  // 1:24:00
   const session = await auth()
-  // console.log('session', session)
+
   return (
     <div className="bg-gradient-to-r from-rose-300 to-amber-400">
       <div className="min-h-screen flex flex-col items-center justify-center max-w-7xl mx-auto">
