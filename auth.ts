@@ -12,6 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET
     }),
+    // не получается войти с других аккаунтов кроме artsan, просит предоставить разрешение
     Goggle({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET
@@ -39,6 +40,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         throw new Error('Invalid session')
       }
     },
+    // GPT предложил такой вариант без проверки через кого происходит вход
     async signIn({ account, profile }) {
       try {
         await connectToMongoDB()

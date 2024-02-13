@@ -34,68 +34,6 @@ const ChatMessages = ({ messages, session }: ChatMessagesProps) => {
         const isMessageImage = message.messageType === 'image'
         const isPrevMessageFromSameSender =
           idx > 0 && messages[idx - 1].sender._id === message.sender._id
-
-        // Вычисление ширины фона сообщения
-        const messageWidth = `${Math.min(message.content.length * 0.6, 200)}px`
-
-        const handleImageLoad = () => {
-          lastMsgRef.current?.scrollIntoView({ behavior: 'smooth' })
-        }
-
-        return (
-          <div
-            key={message._id}
-            className={`${amISender ? 'justify-end' : 'justify-start'} w-full`}
-          >
-            {!isPrevMessageFromSameSender && (
-              <p
-                className={`font-bold mt-2 text-xs ${
-                  amISender
-                    ? 'text-right text-sigSnapImg'
-                    : 'text-left text-sigSnapChat'
-                }`}
-              >
-                {amISender ? 'ME' : senderFullName}
-              </p>
-            )}
-            <div
-              className={`border-l-2 ${
-                amISender ? 'border-l-sigSnapImg' : 'border-l-sigSnapChat'
-              } ${amISender ? 'bg-gray-200' : 'bg-white'}`}
-              style={{ width: messageWidth }}
-            >
-              <div className={`flex items-center w-1/2 p-2 rounded-sm `}>
-                {isMessageImage ? (
-                  <div className="relative">
-                    <Image
-                      src={message.content}
-                      width={200}
-                      height={200}
-                      className="h-auto w-auto object-cover cursor-pointer"
-                      alt="Image"
-                      onLoad={handleImageLoad}
-                      onClick={() =>
-                        setIsPreviewingImage({
-                          open: true,
-                          imgURL: message.content
-                        })
-                      }
-                    />
-                  </div>
-                ) : (
-                  <p className="text-sm">{message.content}</p>
-                )}
-              </div>
-            </div>
-          </div>
-        )
-      })}
-      {/* {messages.map((message, idx) => {
-        const amISender = message.sender._id === session?.user?._id
-        const senderFullName = message.sender.fullName.toUpperCase()
-        const isMessageImage = message.messageType === 'image'
-        const isPrevMessageFromSameSender =
-          idx > 0 && messages[idx - 1].sender._id === message.sender._id
         // Скролить вниз если картинка за экраном
         const handleImageLoad = () => {
           lastMsgRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -142,7 +80,7 @@ const ChatMessages = ({ messages, session }: ChatMessagesProps) => {
             </div>
           </div>
         )
-      })} */}
+      })}
 
       <Dialog
         open={isPreviewingImage.open}
