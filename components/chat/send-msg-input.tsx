@@ -16,14 +16,12 @@ const SendMsgInput = () => {
 
   const receiverId = params.id
 
-  // console.log('receiverId', receiverId)
-  // console.log('messageContent', messageContent)
-
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     try {
       const result = await sendMessageAction(receiverId, messageContent, 'text')
+      // при положительном результате приходит true вместо, объекта содержащего экземпляры ObjectId из MongoDB, которые являются сложными типами данных.
       if (result) {
         setMessageContent('')
       }

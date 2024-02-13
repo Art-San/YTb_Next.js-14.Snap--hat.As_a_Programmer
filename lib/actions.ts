@@ -106,10 +106,10 @@ export const sendMessageAction = async (
     // Альтернативное использование функции revalidatePath:
     // revalidatePath('/chat/[id]', 'page')
 
-    const plainObject = await convertMongooseObjectToPlainObject(newMessage)
+    const plainObject = convertMongooseObjectToPlainObject(newMessage)
 
-    return true
-    // return plainObject
+    // return true
+    return plainObject
   } catch (error: any) {
     console.error('Error in sendMessage:', error.message)
     throw error
